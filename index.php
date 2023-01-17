@@ -18,6 +18,7 @@ $f3->route('GET /', function() {
     //Instantiate a view
     $view = new Template();
     echo $view->render("views/diner-home.html");
+
 });
 
 //Run Fat Free
