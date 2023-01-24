@@ -1,0 +1,47 @@
+<!-- breakfast.html -->
+
+<include href="views/header.html"></include>
+<body>
+
+    <div class="container">
+        <h1>My Diner</h1>
+        <h2>Order Part 1</h2>
+
+        <form action="#" method="get" class="form-horizontal">
+
+            <!-- get food -->
+            <div class="form-group">
+                <label for="food" class="col-sm-4 control-label">What food would you like to order?</label>
+                <div class="col-sm-4"><input class="form-control" type="text"
+                                             name="food" id="food" ></div>
+            </div>
+            <br>
+
+            <!-- get meal -->
+            <div class="form-group">
+                <label class="col-sm-4 control-label">Select a meal</label>
+                <div class="col-sm-4">
+                    <label><input type="radio" name="meal" value="breakfast">Breakfast</label><br>
+                    <label><input type="radio" name="meal" value="lunch">Lunch</label><br>
+                    <label><input type="radio" name="meal" value="dinner">Dinner</label><br>
+                </div>
+            </div>
+            <br>
+
+            <!-- submit button -->
+            <div class="col-xs-3 ">
+                <button class="btn btn-primary" type="submit">Next</button>
+            </div>
+        </form>
+
+</div>
+
+<!-- Add a few more styles + favicon(?) + About Us section
+     Version control your changes
+-->
+
+<!-- Bootstrap Bundle with Popper -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
+
+</body>
+</html>
