@@ -1,4 +1,5 @@
 <?php
+
 // order1 route -> views/order-form1.html
 // summary route -> views/order-summary.html
 
@@ -38,20 +39,19 @@ $f3->route('GET /breakfast', function() {
 //Define an order1 route (328/diner/order1)
 $f3->route('GET|POST /order1', function($f3) {
 
+    //var_dump($_POST);
+    //["food"]=> string(5) "pizza" ["meal"]=> string(9) "breakfast" }
+
+
     //If the form has been submitted
     if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
-        $valid = true;
+        //Move data from POST array to SESSION array
+        $_SESSION['food'] = $_POST['food'];
+        $_SESSION['meal'] = $_POST['meal'];
 
-        //If the data is valid
-        if ($valid) {
-            //Move data from POST array to SESSION array
-            $_SESSION['food'] = $_POST['food'];
-            $_SESSION['meal'] = $_POST['meal'];
-
-            //Redirect to summary page
-            $f3->reroute('summary');
-        }
+        //Redirect to summary page
+        $f3->reroute('order2');
     }
 
     //Instantiate a view
@@ -61,7 +61,17 @@ $f3->route('GET|POST /order1', function($f3) {
 });
 
 //Define an order2 route (328/diner/order2)
-$f3->route('GET /order2', function() {
+$f3->route('GET|POST /order2', function($f3) {
+
+    //If the form has been submitted
+    if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+
+        //Move data from POST array to SESSION array
+        $_SESSION['conds'] = implode(", ",$_POST['conds']);
+
+        //Redirect to summary page
+        $f3->reroute('summary');
+    }
 
     //Instantiate a view
     $view = new Template();
