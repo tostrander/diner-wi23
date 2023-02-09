@@ -17,9 +17,9 @@
             <div class="form-group">
                 <label class="col-sm-4 control-label">Select a meal</label>
                 <div class="col-sm-4">
-                    <label><input type="checkbox" name="conds[]" value="ketchup">Ketchup</label><br>
-                    <label><input type="checkbox" name="conds[]" value="mustard">Mustard</label><br>
-                    <label><input type="checkbox" name="conds[]" value="sriracha">Sriracha</label><br>
+                    <repeat group="{{ @condiments }}" value="{{ @condiment }}">
+                        <label><input type="checkbox" name="conds[]" value="{{ @condiment }}"> {{ ucfirst(@condiment) }}</label><br>
+                    </repeat>
                 </div>
             </div>
             <br>
