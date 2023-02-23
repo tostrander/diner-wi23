@@ -65,4 +65,47 @@ class Controller
         echo $view->render('views/order-form1.html');
 
     }
+
+    function order2()
+    {
+        //If the form has been submitted
+        if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+
+            //Move data from POST array to SESSION array
+            /*
+            $newOrder = $_SESSION['newOrder'];
+            $condString = implode(", ",$_POST['conds']);
+            $newOrder->setCondiments($condString);
+            $_SESSION['newOrder'] = $newOrder;
+            */
+
+            $condString = isset($_POST['conds']) ?
+                implode(", ",$_POST['conds']) : "";
+            $_SESSION['newOrder']->setCondiments($condString);
+
+            //$_SESSION['conds'] = implode(", ",$_POST['conds']);
+
+            //Redirect to summary page
+            $this->_f3->reroute('summary');
+        }
+
+        //Add condiments to the hive
+        $this->_f3->set('condiments', DataLayer::getCondiments());
+
+        //Instantiate a view
+        $view = new Template();
+        echo $view->render("views/order-form2.html");
+    }
+
+    function summary()
+    {
+        //Write to Database
+
+        //Instantiate a view
+        $view = new Template();
+        echo $view->render("views/order-summary.html");
+
+        //Destroy session array
+        session_destroy();
+    }
 }
