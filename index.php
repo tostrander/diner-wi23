@@ -9,13 +9,23 @@
 ini_set('display_errors', 1);
 error_reporting(E_ALL);
 
-//Start a session
-session_start();
-
 //Require files
 require_once('vendor/autoload.php');
 require_once('model/data-layer.php');
 require_once('model/validate.php');
+//require_once('classes/order.php');
+
+//Start a session AFTER requiring autoload.php
+session_start();
+//var_dump($_SESSION);
+
+/*
+$myOrder = new Order();
+$myOrder->setFood("tacos");
+echo $myOrder->getFood();
+var_dump($myOrder);
+*/
+
 /*
 $food1 = "tacos";
 $food2 = "        ";
@@ -58,10 +68,12 @@ $f3->route('GET|POST /order1', function($f3) {
     //If the form has been submitted
     if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
+        $newOrder = new Order();
+
         //Move food from POST array to SESSION array
         $food = trim($_POST['food']);
         if (validFood($food)) {
-            $_SESSION['food'] = $food;
+            $newOrder->setFood($food);
         }
         else {
             $f3->set('errors["food"]',
@@ -71,7 +83,7 @@ $f3->route('GET|POST /order1', function($f3) {
         //Validate the meal
         $meal = $_POST['meal'];
         if (validMeal($meal)) {
-            $_SESSION['meal'] = $meal;
+            $newOrder->setMeal($meal);
         }
         else {
             $f3->set('errors["meal"]',
@@ -81,6 +93,7 @@ $f3->route('GET|POST /order1', function($f3) {
         //Redirect to summary page
         //if there are no errors
         if (empty($f3->get('errors'))) {
+            $_SESSION['newOrder'] = $newOrder;
             $f3->reroute('order2');
         }
     }
@@ -101,7 +114,17 @@ $f3->route('GET|POST /order2', function($f3) {
     if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
         //Move data from POST array to SESSION array
-        $_SESSION['conds'] = implode(", ",$_POST['conds']);
+        /*
+        $newOrder = $_SESSION['newOrder'];
+        $condString = implode(", ",$_POST['conds']);
+        $newOrder->setCondiments($condString);
+        $_SESSION['newOrder'] = $newOrder;
+        */
+
+        $condString = implode(", ",$_POST['conds']);
+        $_SESSION['newOrder']->setCondiments($condString);
+
+        //$_SESSION['conds'] = implode(", ",$_POST['conds']);
 
         //Redirect to summary page
         $f3->reroute('summary');
@@ -119,9 +142,14 @@ $f3->route('GET|POST /order2', function($f3) {
 //Define a summary route (328/diner/summary)
 $f3->route('GET /summary', function() {
 
+    //Write to Database
+
     //Instantiate a view
     $view = new Template();
     echo $view->render("views/order-summary.html");
+
+    //Destroy session array
+    session_destroy();
 
 });
 
