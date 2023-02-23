@@ -11,9 +11,6 @@ error_reporting(E_ALL);
 
 //Require files
 require_once('vendor/autoload.php');
-require_once('model/data-layer.php');
-require_once('model/validate.php');
-//require_once('classes/order.php');
 
 //Start a session AFTER requiring autoload.php
 session_start();
@@ -40,12 +37,13 @@ echo validFood($food3) ? "valid" : "not valid";
 //Instantiate F3 Base class
 $f3 = Base::instance();
 
+//Instantiate a Controller object
+$con = new Controller($f3);
+
 //Define a default route (328/diner)
 $f3->route('GET /', function() {
 
-    //Instantiate a view
-    $view = new Template();
-    echo $view->render("views/diner-home.html");
+    $GLOBALS['con']->home();
 
 });
 
@@ -61,49 +59,7 @@ $f3->route('GET /breakfast', function() {
 //Define an order1 route (328/diner/order1)
 $f3->route('GET|POST /order1', function($f3) {
 
-    //var_dump($_POST);
-    //["food"]=> string(5) "pizza" ["meal"]=> string(9) "breakfast" }
-
-
-    //If the form has been submitted
-    if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-
-        $newOrder = new Order();
-
-        //Move food from POST array to SESSION array
-        $food = trim($_POST['food']);
-        if (validFood($food)) {
-            $newOrder->setFood($food);
-        }
-        else {
-            $f3->set('errors["food"]',
-                'Food must have at least 2 chars');
-        }
-
-        //Validate the meal
-        $meal = $_POST['meal'];
-        if (validMeal($meal)) {
-            $newOrder->setMeal($meal);
-        }
-        else {
-            $f3->set('errors["meal"]',
-                'Meal is invalid');
-        }
-
-        //Redirect to summary page
-        //if there are no errors
-        if (empty($f3->get('errors'))) {
-            $_SESSION['newOrder'] = $newOrder;
-            $f3->reroute('order2');
-        }
-    }
-
-    //Add meals to F3 hive
-    $f3->set('meals', getMeals());
-
-    //Instantiate a view
-    $view = new Template();
-    echo $view->render('views/order-form1.html');
+    $GLOBALS['con']->order1();
 
 });
 
@@ -131,7 +87,7 @@ $f3->route('GET|POST /order2', function($f3) {
     }
 
     //Add condiments to the hive
-    $f3->set('condiments', getCondiments());
+    $f3->set('condiments', DataLayer::getCondiments());
 
     //Instantiate a view
     $view = new Template();
