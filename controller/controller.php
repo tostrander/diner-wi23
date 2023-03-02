@@ -63,7 +63,6 @@ class Controller
         //Instantiate a view
         $view = new Template();
         echo $view->render('views/order-form1.html');
-
     }
 
     function order2()
@@ -99,7 +98,11 @@ class Controller
 
     function summary()
     {
+        //var_dump($_SESSION);
+
         //Write to Database
+        $id = $GLOBALS['dataLayer']->saveOrder($_SESSION['newOrder']);
+        echo "Order ID: $id";
 
         //Instantiate a view
         $view = new Template();
@@ -107,5 +110,16 @@ class Controller
 
         //Destroy session array
         session_destroy();
+    }
+
+    function admin()
+    {
+        //Get the data from the model
+        $orders = $GLOBALS['dataLayer']->getOrders();
+        $this->_f3->set('orders', $orders);
+
+        //Display the admin page
+        $view = new Template();
+        echo $view->render('views/admin.html');
     }
 }

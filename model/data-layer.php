@@ -44,6 +44,23 @@ class DataLayer
         return $id;
     }
 
+    function getOrders()
+    {
+        //1. Define the query
+        $sql = "SELECT * FROM orders";
+
+        //2. Prepare the statement
+        $statement = $this->_dbh->prepare($sql);
+
+        //3. Bind the parameters
+
+        //4. Execute the query
+        $statement->execute();
+
+        //5. Process the results
+        return $statement->fetchAll(PDO::FETCH_ASSOC);
+    }
+
     static function getMeals()
     {
         return array("breakfast", "lunch",

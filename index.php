@@ -11,17 +11,12 @@ require_once('vendor/autoload.php');
 session_start();
 //var_dump($_SESSION);
 
-//Test my DataLayer class
-$dataLayer = new DataLayer();
-$myOrder = new Order("salad", "lunch", "ketchup, mustard");
-$id = $dataLayer->saveOrder($myOrder);
-echo "$id inserted successfully";
-
 //Instantiate F3 Base class
 $f3 = Base::instance();
 
-//Instantiate a Controller object
+//Instantiate a Controller and DataLayer object
 $con = new Controller($f3);
+$dataLayer = new DataLayer();
 
 //Define a default route (328/diner)
 $f3->route('GET /', function() {
@@ -54,6 +49,12 @@ $f3->route('GET|POST /order2', function($f3) {
 $f3->route('GET /summary', function() {
 
     $GLOBALS['con']->summary();
+});
+
+//Define an admin route (328/diner/admin)
+$f3->route('GET /admin', function() {
+
+    $GLOBALS['con']->admin();
 });
 
 //Run Fat Free
