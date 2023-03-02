@@ -32,4 +32,16 @@ class Validate
 
         return in_array($meal, DataLayer::getMeals());
     }
+
+    //Make sure user's meal is valid
+    static function validCondiments($userConds)
+    {
+        $validConds = DataLayer::getCondiments();
+        foreach ($userConds as $cond) {
+            if (!in_array($cond, $validConds)) {
+                return false;
+            }
+        }
+        return true;
+    }
 }
